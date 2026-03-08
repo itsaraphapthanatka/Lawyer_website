@@ -70,13 +70,13 @@ const AboutSection = () => {
                         </div>
 
                         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-white mb-8 leading-tight">
-                            สำนักงานกฎหมาย <br />
-                            <span className="text-secondary">ฉัตรชัยและเพื่อน</span>
+                            สำนักงาน <br />
+                            <span className="text-secondary">ธนวัฒน์ทนายความ</span>
                         </h2>
 
                         <div className="space-y-6 text-gray-400 text-lg leading-relaxed mb-10">
                             <p>
-                                สำนักงานกฎหมายฉัตรชัยและเพื่อน ก่อตั้งขึ้นด้วยอุดมการณ์ในการให้บริการด้านกฎหมาย
+                                สำนักงานธนวัฒน์ทนายความ ก่อตั้งขึ้นด้วยอุดมการณ์ในการให้บริการด้านกฎหมาย
                                 ที่มีความเที่ยงตรง ยุติธรรม และซื่อตรง เรามีทีมทนายความเป็นมีประสบการณ์และความเชี่ยวชาญ
                                 ในการว่าความคดีทุกประเภท พร้อมให้บริการด้วยความมุ่งมั่นและซื่อตรงต่อลูกความ
                             </p>
