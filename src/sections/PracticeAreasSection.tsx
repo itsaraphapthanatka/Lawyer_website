@@ -1,14 +1,16 @@
 import { useEffect, useRef } from 'react';
-import { 
-  Building2, 
-  Users, 
-  Gavel, 
+import { useNavigate } from 'react-router-dom';
+import {
+  Building2,
+  Users,
+  Gavel,
   Home,
   ArrowRight
 } from 'lucide-react';
 
 const PracticeAreasSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -79,14 +81,17 @@ const PracticeAreasSection = () => {
               <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/50 text-secondary group-hover:bg-secondary group-hover:text-primary transition-colors">
                 <area.icon className="w-6 h-6" />
               </div>
-              
+
               <h4 className="text-xl font-bold mb-3 text-white">{area.title}</h4>
-              
+
               <p className="text-gray-400 text-sm leading-relaxed mb-6">
                 {area.description}
               </p>
-              
-              <button className="inline-flex items-center gap-2 text-secondary font-bold text-xs uppercase tracking-widest group-hover:gap-3 transition-all">
+
+              <button
+                onClick={() => navigate('/practice-areas')}
+                className="inline-flex items-center gap-2 text-secondary font-bold text-xs uppercase tracking-widest group-hover:gap-3 transition-all"
+              >
                 อ่านเพิ่มเติม
                 <ArrowRight className="w-4 h-4" />
               </button>

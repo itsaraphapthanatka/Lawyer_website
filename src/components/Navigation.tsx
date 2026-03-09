@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Menu, X, Scale } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -14,6 +17,17 @@ const Navigation = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (location.hash) {
+      setTimeout(() => {
+        const element = document.querySelector(location.hash);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 300);
+    }
+  }, [location]);
+
   const navLinks = [
     { name: 'เกี่ยวกับเรา', href: '#about' },
     { name: 'สาขาที่เชี่ยวชาญ', href: '#practice-areas' },
@@ -22,12 +36,16 @@ const Navigation = () => {
     { name: 'รีวิวจากลูกค้า', href: '#testimonials' },
   ];
 
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+  const handleNavClick = (href: string) => {
     setIsMobileMenuOpen(false);
+    if (location.pathname !== '/') {
+      navigate('/' + href);
+    } else {
+      const element = document.querySelector(href);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
   };
 
   return (
@@ -40,7 +58,10 @@ const Navigation = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-20 items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center gap-3">
+          <div
+            onClick={() => handleNavClick('')}
+            className="flex items-center gap-3 cursor-pointer"
+          >
             <div className="flex h-10 w-10 items-center justify-center rounded bg-primary text-secondary">
               <Scale className="w-6 h-6" />
             </div>
@@ -54,7 +75,7 @@ const Navigation = () => {
             {navLinks.map((link) => (
               <button
                 key={link.name}
-                onClick={() => scrollToSection(link.href)}
+                onClick={() => handleNavClick(link.href)}
                 className="text-sm font-medium text-gray-300 hover:text-secondary transition-colors"
               >
                 {link.name}
@@ -65,7 +86,7 @@ const Navigation = () => {
           {/* CTA Button */}
           <div className="hidden md:block">
             <Button
-              onClick={() => scrollToSection('#booking')}
+              onClick={() => handleNavClick('#booking')}
               className="bg-primary hover:bg-navy-800 text-white px-6 py-2.5 rounded-lg text-sm font-bold border border-secondary/30 transition-all shadow-lg shadow-black/20"
             >
               ปรึกษากฎหมายกับเรา
@@ -88,7 +109,7 @@ const Navigation = () => {
               {navLinks.map((link) => (
                 <button
                   key={link.name}
-                  onClick={() => scrollToSection(link.href)}
+                  onClick={() => handleNavClick(link.href)}
                   className="text-left text-gray-300 font-medium py-2 hover:text-secondary transition-colors"
                 >
                   {link.name}
@@ -96,7 +117,7 @@ const Navigation = () => {
               ))}
               <hr className="border-white/10" />
               <Button
-                onClick={() => scrollToSection('#booking')}
+                onClick={() => handleNavClick('#booking')}
                 className="bg-primary hover:bg-navy-800 text-white w-full"
               >
                 ปรึกษากฎหมายกับเรา
