@@ -1,9 +1,31 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { MessageSquare, Phone } from 'lucide-react';
+import { fetchApi } from '@/lib/api';
+
+interface HeroData {
+  badge: string;
+  title: string;
+  subtitle: string;
+  image: string;
+  trustedText: string;
+}
 
 const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
+  const [heroData, setHeroData] = useState<HeroData | null>(null);
+
+  useEffect(() => {
+    const loadHero = async () => {
+      try {
+        const data = await fetchApi<HeroData>('/hero');
+        setHeroData(data);
+      } catch (error) {
+        console.error('Failed to load hero data:', error);
+      }
+    };
+    loadHero();
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -21,7 +43,7 @@ const HeroSection = () => {
     elements?.forEach((el) => observer.observe(el));
 
     return () => observer.disconnect();
-  }, []);
+  }, [heroData]);
 
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
@@ -29,6 +51,8 @@ const HeroSection = () => {
       element.scrollIntoView({ behavior: 'smooth' });
     }
   };
+
+  if (!heroData) return null;
 
   return (
     <section
@@ -47,15 +71,21 @@ const HeroSection = () => {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
               </span>
-              ทนายความมืออาชีพ
+              {heroData.badge}
             </div>
 
             <h1 className="fade-up opacity-0 translate-y-8 transition-all duration-700 delay-100 text-4xl sm:text-5xl lg:text-6xl font-serif font-bold leading-tight mb-8 text-white">
-              บริการด้านกฎหมาย<span className="italic text-secondary">ครบวงจร</span>
+              {heroData.title.includes('กฎหมาย') ? (
+                <>
+                  {heroData.title.split('กฎหมาย')[0]}
+                  <span className="italic text-secondary">กฎหมาย</span>
+                  {heroData.title.split('กฎหมาย')[1]}
+                </>
+              ) : heroData.title}
             </h1>
 
             <p className="fade-up opacity-0 translate-y-8 transition-all duration-700 delay-200 text-lg text-gray-400 mb-10 leading-relaxed">
-              ประสบการณ์กว่า 30 ปี ให้คำปรึกษาและว่าความทุกประเภทคดี โดยทีมทนายความที่มีความเชี่ยวชาญและประสบการณ์สูง พร้อมดูแลคุณด้วยความซื่อสัตย์และมุ่งมั่น
+              {heroData.subtitle}
             </p>
 
             <div className="fade-up opacity-0 translate-y-8 transition-all duration-700 delay-300 flex flex-col sm:flex-row gap-4">
@@ -84,7 +114,7 @@ const HeroSection = () => {
             <div className="absolute -inset-4 bg-secondary/20 rounded-2xl blur-2xl opacity-30" />
             <div className="relative aspect-[4/5] w-full rounded-2xl overflow-hidden shadow-2xl border border-white/10">
               <img
-                src="/images/hero-lawyer.jpg"
+                src={heroData.image}
                 alt="ทนายความมืออาชีพ"
                 className="w-full h-full object-cover"
               />
@@ -102,7 +132,7 @@ const HeroSection = () => {
                       <img src="/images/expert-3.jpg" alt="ทนาย" className="w-full h-full object-cover" />
                     </div>
                   </div>
-                  <div className="text-sm font-medium text-white">ได้รับความไว้วางใจจากลูกค้ากว่า 500+ ราย</div>
+                  <div className="text-sm font-medium text-white">{heroData.trustedText}</div>
                 </div>
               </div>
             </div>

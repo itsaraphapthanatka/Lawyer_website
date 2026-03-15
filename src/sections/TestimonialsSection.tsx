@@ -1,8 +1,32 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Star } from 'lucide-react';
+import { fetchApi } from '@/lib/api';
+
+interface Testimonial {
+  id: string;
+  quote: string;
+  author: string;
+  position: string;
+  avatar: string;
+  rating: number;
+}
 
 const TestimonialsSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+
+  useEffect(() => {
+    // Fetch testimonials from API
+    const loadTestimonials = async () => {
+      try {
+        const data = await fetchApi<Testimonial[]>('/testimonials');
+        setTestimonials(data);
+      } catch (error) {
+        console.error('Failed to load testimonials:', error);
+      }
+    };
+    loadTestimonials();
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -20,28 +44,7 @@ const TestimonialsSection = () => {
     elements?.forEach((el) => observer.observe(el));
 
     return () => observer.disconnect();
-  }, []);
-
-  const testimonials = [
-    {
-      quote: 'สำนักงานกฎหมายฉัตรชัย ช่วยให้ความชัดเจนอย่างยิ่งในระหว่างการควบรวมกิจการที่ซับซ้อนมาก การคิดเชิงกลยุทธ์ของพวกเขานั้นหาตัวจับยากในอุตสาหกรรมนี้',
-      author: 'คุณสมชาย วงศ์ใหญ่',
-      position: 'ซีอีโอ, Apex Dynamics',
-      avatar: '/images/avatar-1.jpg',
-    },
-    {
-      quote: 'แนวทางของพวกเขาต่อกฎหมายครอบครัวนั้นมีความละเอียดอ่อนและมั่นคงในเวลาเดียวกัน ฉันรู้สึกได้รับการปกป้องอย่างสมบูรณ์ตลอดกระบวนการทางกฎหมายทั้งหมด',
-      author: 'คุณสุภาพร จันทร์เพ็ญ',
-      position: 'ลูกค้าส่วนบุคคล',
-      avatar: '/images/avatar-2.jpg',
-    },
-    {
-      quote: 'ขุมพลังในห้องพิจารณาคดี กลยุทธ์การป้องกันของทีมงานช่วยรักษาชื่อเสียงของเราและปกป้องผลประโยชน์ในอนาคตของเราไว้ได้',
-      author: 'คุณประเสริฐ สุขสม',
-      position: 'ซีโอโอ, Global Logistics',
-      avatar: '/images/avatar-3.jpg',
-    },
-  ];
+  }, [testimonials]);
 
   return (
     <section

@@ -1,16 +1,34 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  Building2,
-  Users,
-  Gavel,
-  Home,
-  ArrowRight
-} from 'lucide-react';
+import { fetchApi } from '@/lib/api';
+import * as Icons from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+
+interface PracticeArea {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+}
 
 const PracticeAreasSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const [practiceAreas, setPracticeAreas] = useState<PracticeArea[]>([]);
+
+  useEffect(() => {
+    // Fetch practice areas from API
+    const loadPracticeAreas = async () => {
+      try {
+        const data = await fetchApi<PracticeArea[]>('/practice-areas');
+        setPracticeAreas(data);
+      } catch (error) {
+        console.error('Failed to load practice areas:', error);
+      }
+    };
+    loadPracticeAreas();
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -28,30 +46,18 @@ const PracticeAreasSection = () => {
     elements?.forEach((el) => observer.observe(el));
 
     return () => observer.disconnect();
-  }, []);
+  }, [practiceAreas]);
 
-  const practiceAreas = [
-    {
-      icon: Building2,
-      title: 'กฎหมายองค์กร',
-      description: 'ที่ปรึกษาทางธุรกิจเชิงกลยุทธ์ การควบรวมกิจการ (M&A) และการฟ้องร้องดำเนินคดีทางการค้าที่เข้มงวดสำหรับองค์กร',
-    },
-    {
-      icon: Users,
-      title: 'กฎหมายครอบครัว',
-      description: 'คำแนะนำด้วยความเห็นอกเห็นใจสำหรับการเปลี่ยนแปลงในครอบครัวที่ซับซ้อนและการหย่าร้าง',
-    },
-    {
-      icon: Gavel,
-      title: 'การต่อสู้คดีอาญา',
-      description: 'กลยุทธ์การป้องกันตัวที่เหนือชั้นสำหรับอาชญากรรมทางเศรษฐกิจที่ซับซ้อนและความท้าทายทางกฎหมายต่างๆ',
-    },
-    {
-      icon: Home,
-      title: 'อสังหาริมทรัพย์',
-      description: 'การทำธุรกรรมอสังหาริมทรัพย์เพื่อการอยู่อาศัยและเชิงพาณิชย์ระดับพรีเมียม รวมถึงกฎหมายการพัฒนาโครงการ',
-    },
-  ];
+  // Dynamic icon component renderer
+  const renderIcon = (iconName: string, props: React.SVGProps<SVGSVGElement>) => {
+    // Cast Icons to any to bypass the complex type incompatibility
+    const IconComponent = (Icons as any)[iconName] as LucideIcon;
+    if (!IconComponent) {
+      const FallbackIcon = Icons.HelpCircle as LucideIcon;
+      return <FallbackIcon {...props} />;
+    }
+    return <IconComponent {...props} />;
+  };
 
   return (
     <section
@@ -79,7 +85,7 @@ const PracticeAreasSection = () => {
               style={{ transitionDelay: `${(index + 2) * 100}ms` }}
             >
               <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/50 text-secondary group-hover:bg-secondary group-hover:text-primary transition-colors">
-                <area.icon className="w-6 h-6" />
+                {renderIcon(area.icon, { className: "w-6 h-6" })}
               </div>
 
               <h4 className="text-xl font-bold mb-3 text-white">{area.title}</h4>

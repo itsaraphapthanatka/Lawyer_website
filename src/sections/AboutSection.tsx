@@ -1,8 +1,39 @@
-import { useEffect, useRef } from 'react';
-import { Check, Shield, Award, Users, Scale, MapPin, Phone, Clock } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Check, MapPin, Phone, Clock } from 'lucide-react';
+import { fetchApi } from '@/lib/api';
+import * as Icons from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+
+interface AboutData {
+    badge: string;
+    title: string;
+    descriptions: string[];
+    checklist: string[];
+    address: string;
+    phone: string;
+    workingHours: string;
+    features: {
+        title: string;
+        description: string;
+        icon: string;
+    }[];
+}
 
 const AboutSection = () => {
     const sectionRef = useRef<HTMLDivElement>(null);
+    const [aboutData, setAboutData] = useState<AboutData | null>(null);
+
+    useEffect(() => {
+        const loadAbout = async () => {
+            try {
+                const data = await fetchApi<AboutData>('/about');
+                setAboutData(data);
+            } catch (error) {
+                console.error('Failed to load about data:', error);
+            }
+        };
+        loadAbout();
+    }, []);
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -20,39 +51,18 @@ const AboutSection = () => {
         elements?.forEach((el) => observer.observe(el));
 
         return () => observer.disconnect();
-    }, []);
+    }, [aboutData]);
 
-    const features = [
-        {
-            title: 'ความน่าเชื่อถือ',
-            description: 'ดำเนินคดีด้วยความซื่อสัตย์ โปร่งใส ให้ความสำคัญกับประโยชน์ของลูกความที่เป็นหลัก',
-            icon: <Shield className="w-6 h-6 text-secondary" />,
-        },
-        {
-            title: 'ประสบการณ์สูง',
-            description: 'ทีมทนายความที่มีประสบการณ์รวมกว่า 100 ปี ผ่านคดีความมากมายทุกประเภท',
-            icon: <Award className="w-6 h-6 text-secondary" />,
-        },
-        {
-            title: 'ทีมงานมืออาชีพ',
-            description: 'ทีมทนายความที่มีคุณภาพ พร้อมให้คำปรึกษาและดูแลคดีอย่างใกล้ชิด',
-            icon: <Users className="w-6 h-6 text-secondary" />,
-        },
-        {
-            title: 'บริการครบวงจร',
-            description: 'ให้บริการทางกฎหมายครบวงจร ตั้งแต่การให้คำปรึกษาจนถึงการบังคับคดี',
-            icon: <Scale className="w-6 h-6 text-secondary" />,
-        },
-    ];
+    const renderIcon = (iconName: string, props: React.SVGProps<SVGSVGElement>) => {
+        const IconComponent = (Icons as any)[iconName] as LucideIcon;
+        if (!IconComponent) {
+            const FallbackIcon = Icons.HelpCircle as LucideIcon;
+            return <FallbackIcon {...props} />;
+        }
+        return <IconComponent {...props} />;
+    };
 
-    const checklist = [
-        'ให้คำปรึกษากฎหมาย 24 ชั่วโมง',
-        'บริการจดทะเบียนธุรกิจ',
-        'ทีมทนายความมืออาชีพ',
-        'รับว่าความคดีแพ่ง อาญา ปกครอง',
-        'การบังคับคดีครบวงจร',
-        'ประสบการณ์กว่า 30 ปี',
-    ];
+    if (!aboutData) return null;
 
     return (
         <section
@@ -66,29 +76,31 @@ const AboutSection = () => {
                     {/* Left Column: Text Content */}
                     <div className="fade-up opacity-0 translate-y-8 transition-all duration-700">
                         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary/10 border border-secondary/20 text-secondary text-xs font-bold uppercase tracking-widest mb-6">
-                            เกี่ยวกับเรา
+                            {aboutData.badge}
                         </div>
 
                         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-white mb-8 leading-tight">
-                            สำนักงาน <br />
-                            <span className="text-secondary">ธนวัฒน์ทนายความ</span>
+                            {aboutData.title.split(' ').map((word, i) => (
+                                <span key={i}>
+                                    {word.includes('ธนวัฒน์') ? (
+                                        <><span className="text-secondary">{word}</span> </>
+                                    ) : (
+                                        <>{word} </>
+                                    )}
+                                    {i === 0 && <br />}
+                                </span>
+                            ))}
                         </h2>
 
                         <div className="space-y-6 text-gray-400 text-lg leading-relaxed mb-10">
-                            <p>
-                                สำนักงานธนวัฒน์ทนายความ ก่อตั้งขึ้นด้วยอุดมการณ์ในการให้บริการด้านกฎหมาย
-                                ที่มีความเที่ยงตรง ยุติธรรม และซื่อตรง เรามีทีมทนายความเป็นมีประสบการณ์และความเชี่ยวชาญ
-                                ในการว่าความคดีทุกประเภท พร้อมให้บริการด้วยความมุ่งมั่นและซื่อตรงต่อลูกความ
-                            </p>
-                            <p>
-                                เราให้บริการด้านกฎหมายครบวงจร ตั้งแต่การให้คำปรึกษา การว่าความในศาลชั้นต้น
-                                ศาลอุทธรณ์ ศาลฎีกา ไปจนถึงการบังคับคดี รวมถึงบริการจดทะเบียนธุรกิจและที่ปรึกษากฎหมายประจำบริษัท
-                            </p>
+                            {aboutData.descriptions.map((desc, index) => (
+                                <p key={index}>{desc}</p>
+                            ))}
                         </div>
 
                         {/* Checklist */}
                         <div className="grid sm:grid-cols-2 gap-4 mb-12">
-                            {checklist.map((item, index) => (
+                            {aboutData.checklist.map((item, index) => (
                                 <div key={index} className="flex items-center gap-3">
                                     <div className="flex-shrink-0 w-5 h-5 rounded-full bg-secondary/20 flex items-center justify-center">
                                         <Check className="w-3 h-3 text-secondary" strokeWidth={3} />
@@ -106,7 +118,7 @@ const AboutSection = () => {
                                     <div>
                                         <h4 className="text-white font-bold mb-1">ที่อยู่</h4>
                                         <p className="text-gray-400 text-sm">
-                                            43 ซ.อุดมสุข 53 แยก 4 แขวงหนองบอน เขตประเวศ กรุงเทพมหานคร 10250
+                                            {aboutData.address}
                                         </p>
                                     </div>
                                 </div>
@@ -115,7 +127,7 @@ const AboutSection = () => {
                                     <Phone className="w-6 h-6 text-secondary flex-shrink-0 mt-1" />
                                     <div>
                                         <h4 className="text-white font-bold mb-1">โทรศัพท์</h4>
-                                        <p className="text-gray-400 text-sm">02-743-4025-6, 08-98765-789</p>
+                                        <p className="text-gray-400 text-sm">{aboutData.phone}</p>
                                     </div>
                                 </div>
 
@@ -123,7 +135,7 @@ const AboutSection = () => {
                                     <Clock className="w-6 h-6 text-secondary flex-shrink-0 mt-1" />
                                     <div>
                                         <h4 className="text-white font-bold mb-1">เวลาทำการ</h4>
-                                        <p className="text-gray-400 text-sm">จันทร์-ศุกร์ 8:30-17:30 น.</p>
+                                        <p className="text-gray-400 text-sm">{aboutData.workingHours}</p>
                                     </div>
                                 </div>
                             </div>
@@ -132,14 +144,14 @@ const AboutSection = () => {
 
                     {/* Right Column: Feature Cards */}
                     <div className="grid sm:grid-cols-2 gap-6 lg:mt-12">
-                        {features.map((feature, index) => (
+                        {aboutData.features.map((feature, index) => (
                             <div
                                 key={index}
                                 className={`fade-up opacity-0 translate-y-8 transition-all duration-700 bg-[#1a232e] border border-white/5 p-8 rounded-2xl hover:border-secondary/30 transition-all group`}
                                 style={{ transitionDelay: `${(index + 1) * 150}ms` }}
                             >
                                 <div className="w-14 h-14 rounded-xl bg-secondary/10 flex items-center justify-center mb-6 group-hover:bg-secondary/20 transition-colors">
-                                    {feature.icon}
+                                    {renderIcon(feature.icon, { className: "w-6 h-6 text-secondary" })}
                                 </div>
                                 <h3 className="text-xl font-bold text-white mb-3">{feature.title}</h3>
                                 <p className="text-gray-400 text-sm leading-relaxed">

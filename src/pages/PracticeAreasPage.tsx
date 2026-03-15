@@ -1,97 +1,49 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-    Building2,
-    Users,
-    Gavel,
-    Home,
     ArrowLeft,
-    ShieldCheck,
-    Scale
+    ShieldCheck
 } from 'lucide-react';
+import * as Icons from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import { fetchApi } from '@/lib/api';
+
+interface PracticeArea {
+    id: string;
+    title: string;
+    description: string;
+    icon: string;
+    details: string[];
+}
 
 const PracticeAreasPage = () => {
     const navigate = useNavigate();
+    const [practiceAreas, setPracticeAreas] = useState<PracticeArea[]>([]);
 
     useEffect(() => {
         window.scrollTo(0, 0);
+        const loadPracticeAreas = async () => {
+            try {
+                const data = await fetchApi<PracticeArea[]>('/practice-areas');
+                setPracticeAreas(data);
+            } catch (error) {
+                console.error('Failed to load practice areas:', error);
+            }
+        };
+        loadPracticeAreas();
     }, []);
 
-    const specialties = [
-        {
-            id: 'corporate',
-            icon: <Building2 className="w-10 h-10" />,
-            title: 'กฎหมายองค์กรและธุรกิจ',
-            description: 'บริการที่ปรึกษาทางธุรกิจเชิงกลยุทธ์ ครอบคลุมตั้งแต่การจดทะเบียนจัดตั้งบริษัท การร่างสัญญาทางการค้า จนถึงการฟ้องร้องดำเนินคดีทางการค้าที่ซับซ้อน',
-            details: [
-                'การจดทะเบียนบริษัทและห้างหุ้นส่วน',
-                'การควบรวมและซื้อกิจการ (M&A)',
-                'การร่างและตรวจทานสัญญาทางธุรกิจ',
-                'กฎหมายแรงงานและข้อบังคับการทำงาน',
-                'การฟ้องร้องดำเนินคดีศาลแพ่งและพาณิชย์',
-                'ที่ปรึกษากฎหมายประจำบริษัท (Legal Retainer)'
-            ]
-        },
-        {
-            id: 'family',
-            icon: <Users className="w-10 h-10" />,
-            title: 'กฎหมายครอบครัวและมรดก',
-            description: 'เราเข้าใจถึงความละเอียดอ่อนของปัญหาครอบครัว ทีมงานของเราพร้อมให้คำปรึกษาด้วยความใส่ใจ เพื่อผลประโยชน์สูงสุดของท่านและบุคคลที่ท่านรัก',
-            details: [
-                'การฟ้องหย่าและแบ่งสินสมรส',
-                'การรับรองบุตรและอำนาจปกครองบุตร',
-                'การร่างพินัยกรรมและจัดการกองมรดก',
-                'คดีผิดสัญญาหมั้นและค่าทดแทน',
-                'การขอเป็นผู้จัดการมรดก',
-                'การไกล่เกลี่ยข้อพิพาทในครอบครัว'
-            ]
-        },
-        {
-            id: 'criminal',
-            icon: <Gavel className="w-10 h-10" />,
-            title: 'การต่อสู้คดีอาญา',
-            description: 'กลยุทธ์การป้องกันตัวที่เหนือชั้นสำหรับทุกประเภทคดีอาญา ตั้งแต่คดีทั่วไปจนถึงคดีเศรษฐกิจที่ซับซ้อน โดยทนายความผู้เชี่ยวชาญการว่าความ',
-            details: [
-                'คดีอาญาทั่วไป (ทำร้ายร่างกาย, ลักทรัพย์ ฯลฯ)',
-                'คดีเศรษฐกิจและทุจริตคอร์รัปชัน',
-                'คดีเช็คและผิดนัดชำระหนี้',
-                'การประกันตัวผู้ต้องหาหรือจำเลย',
-                'การรวบรวมพยานหลักฐานเพื่อต่อสู้คดี',
-                'การอุทธรณ์และฎีกาคดีอาญา'
-            ]
-        },
-        {
-            id: 'real-estate',
-            icon: <Home className="w-10 h-10" />,
-            title: 'กฎหมายอสังหาริมทรัพย์',
-            description: 'บริการให้คำปรึกษาและจัดการธุรกรรมอสังหาริมทรัพย์ระดับพรีเมียม ทั้งเพื่อการอยู่อาศัยและการลงทุนเชิงพาณิชย์',
-            details: [
-                'การตรวจสอบสถานะทรัพย์สิน (Due Diligence)',
-                'การร่างและซื้อขายอสังหาริมทรัพย์',
-                'กฎหมายจัดสรรที่ดินและอาคารชุด',
-                'ข้อพิพาทเรื่องกรรมสิทธิ์และภาระจำยอม',
-                'สัญญาเช่าระยะยาวและเช่าช่วง',
-                'คดีขับไล่และผิดสัญญาจะซื้อจะขาย'
-            ]
-        },
-        {
-            id: 'administrative',
-            icon: <Scale className="w-10 h-10" />,
-            title: 'กฎหมายปกครองและภาษี',
-            description: 'การฟ้องร้องคดีต่อหน่วยงานรัฐและเจ้าหน้าที่ของรัฐ รวมถึงการวางแผนภาษีและแก้ข้อพิพาททางภาษี',
-            details: [
-                'การฟ้องขอเพิกถอนคำสั่งทางปกครอง',
-                'คดีละเมิดของเจ้าหน้าที่รัฐ',
-                'ข้อพิพาทสัญญาทางปกครอง',
-                'การวางแผนภาษีอากรสำหรับบุคคลและนิติบุคคล',
-                'การอุทธรณ์ภาษีและคดีภาษีอากร',
-                'กฎหมายที่ดินและผังเมือง'
-            ]
+    const renderIcon = (iconName: string, props: React.SVGProps<SVGSVGElement>) => {
+        const IconComponent = (Icons as any)[iconName] as LucideIcon;
+        if (!IconComponent) {
+            const FallbackIcon = Icons.HelpCircle as LucideIcon;
+            return <FallbackIcon {...props} />;
         }
-    ];
+        return <IconComponent {...props} />;
+    };
 
     return (
         <div className="min-h-screen bg-dark">
@@ -121,7 +73,7 @@ const PracticeAreasPage = () => {
 
                 {/* Content Section */}
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-                    {specialties.map((item) => (
+                    {practiceAreas.map((item) => (
                         <div
                             key={item.id}
                             className={`flex flex-col lg:flex-row gap-12 p-8 lg:p-12 rounded-3xl bg-secondary/5 border border-white/5 relative overflow-hidden group hover:border-secondary/30 transition-all duration-500`}
@@ -131,7 +83,7 @@ const PracticeAreasPage = () => {
                             {/* Left Column: Icon and Title */}
                             <div className="lg:w-1/3">
                                 <div className="w-20 h-20 rounded-2xl bg-primary flex items-center justify-center text-secondary mb-8 shadow-xl border border-secondary/20">
-                                    {item.icon}
+                                    {renderIcon(item.icon, { className: "w-10 h-10" })}
                                 </div>
                                 <h2 className="text-3xl font-serif font-bold text-white mb-4 leading-tight">
                                     {item.title}
@@ -143,7 +95,7 @@ const PracticeAreasPage = () => {
 
                             {/* Right Column: List of Services */}
                             <div className="lg:w-2/3 grid sm:grid-cols-2 gap-6">
-                                {item.details.map((detail, idx) => (
+                                {item.details?.map((detail, idx) => (
                                     <div key={idx} className="flex items-center gap-4 group/item">
                                         <div className="h-2 w-2 rounded-full bg-secondary group-hover/item:scale-125 transition-transform" />
                                         <p className="text-gray-300 font-medium group-hover/item:text-white transition-colors">{detail}</p>

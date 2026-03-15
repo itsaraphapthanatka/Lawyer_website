@@ -1,8 +1,31 @@
-import { useEffect, useRef } from 'react';
-import { Button } from '@/components/ui/button';
+import { useEffect, useRef, useState } from 'react';
+import { fetchApi } from '@/lib/api';
+// import { Button } from '@/components/ui/button';
+
+interface Expert {
+  id: string;
+  name: string;
+  position: string;
+  image: string;
+  specialty: string;
+}
 
 const ExpertsSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const [experts, setExperts] = useState<Expert[]>([]);
+
+  useEffect(() => {
+    // Fetch experts from the API
+    const loadExperts = async () => {
+      try {
+        const data = await fetchApi<Expert[]>('/experts');
+        setExperts(data);
+      } catch (error) {
+        console.error('Failed to load experts:', error);
+      }
+    };
+    loadExperts();
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -20,28 +43,7 @@ const ExpertsSection = () => {
     elements?.forEach((el) => observer.observe(el));
 
     return () => observer.disconnect();
-  }, []);
-
-  const experts = [
-    {
-      name: 'ทนายธนวัฒน์ พามี',
-      position: 'หุ้นส่วนผู้จัดการ',
-      image: '/images/expert-1.jpg',
-      specialty: 'กฎหมายองค์กรและการควบรวมกิจการ',
-    },
-    {
-      name: 'ทนายฉัตรชัย คำใส',
-      position: 'หัวหน้าแผนกกฎหมายครอบครัว',
-      image: '/images/expert-2.jpg',
-      specialty: 'กฎหมายครอบครัวและมรดก',
-    },
-    {
-      name: 'ทนายปฏิภัทร ศรีมงคลกุล',
-      position: 'ผู้เชี่ยวชาญด้านการดำเนินคดี',
-      image: '/images/expert-3.jpg',
-      specialty: 'การต่อสู้คดีอาญาและคดีแพ่ง',
-    },
-  ];
+  }, [experts]); // Re-run animation observer when experts data changes
 
   return (
     <section
@@ -72,9 +74,9 @@ const ExpertsSection = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-8 text-left">
                   <p className="text-secondary font-bold text-sm mb-2">{expert.position}</p>
-                  <Button className="w-full bg-secondary text-primary py-3 rounded-lg font-bold text-sm hover:bg-secondary/90">
+                  {/* <Button className="w-full bg-secondary text-primary py-3 rounded-lg font-bold text-sm hover:bg-secondary/90">
                     ดูประวัติทั้งหมด
-                  </Button>
+                  </Button> */}
                 </div>
               </div>
               <h4 className="text-2xl font-serif font-bold text-white mb-1">{expert.name}</h4>

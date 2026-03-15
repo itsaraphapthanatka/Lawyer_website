@@ -1,7 +1,29 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { fetchApi } from '@/lib/api';
+
+interface ProcessStep {
+  id: string;
+  number: number;
+  title: string;
+  description: string;
+}
 
 const ProcessSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const [steps, setSteps] = useState<ProcessStep[]>([]);
+
+  useEffect(() => {
+    // Fetch process steps from API
+    const loadSteps = async () => {
+        try {
+            const data = await fetchApi<ProcessStep[]>('/process-steps');
+            setSteps(data);
+        } catch (error) {
+            console.error('Failed to load process steps:', error);
+        }
+    };
+    loadSteps();
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -19,25 +41,7 @@ const ProcessSection = () => {
     elements?.forEach((el) => observer.observe(el));
 
     return () => observer.disconnect();
-  }, []);
-
-  const steps = [
-    {
-      number: '1',
-      title: 'การสอบถามเบื้องต้น',
-      description: 'ความสัมพันธ์ของเราเริ่มต้นด้วยกระบวนการรับข้อมูลอย่างละเอียดเพื่อทำความเข้าใจลักษณะเฉพาะของสถานการณ์ของคุณ',
-    },
-    {
-      number: '2',
-      title: 'การวางแผนกลยุทธ์',
-      description: 'การปรึกษาหารือเชิงลึกกับพาร์ทเนอร์อาวุโสเพื่อร่างแผนที่นำทางทางกฎหมายและกรอบเวลาที่กำหนดขึ้นเฉพาะคุณ',
-    },
-    {
-      number: '3',
-      title: 'การดำเนินการทางกฎหมาย',
-      description: 'การดำเนินการตามกลยุทธ์ที่ตกลงกันไว้อย่างรวดเร็วและเด็ดขาด พร้อมการอัปเดตและการสนับสนุนอย่างต่อเนื่อง',
-    },
-  ];
+  }, [steps]);
 
   return (
     <section
