@@ -27,7 +27,12 @@ interface GeneratedBlog {
 
 const resolveImage = (image?: string) => {
   if (!image) return '';
-  return image.startsWith('http') ? image : `${API_BASE_URL}${image}`;
+  if (image.startsWith('http')) return image;
+  // Bare backend path (legacy "/uploads/x") needs the API prefix. Values that
+  // are already absolute ("/api/uploads/...", "/images/...") are used as-is to
+  // avoid a double "/api/api/..." prefix.
+  if (image.startsWith('/uploads/')) return `${API_BASE_URL}${image}`;
+  return image;
 };
 
 const BlogManager: React.FC = () => {

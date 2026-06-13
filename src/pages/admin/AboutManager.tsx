@@ -19,6 +19,7 @@ interface About {
   address: string;
   phone: string;
   workingHours: string;
+  lineOa: string;
   officeMap: string;
   features: Feature[];
 }
@@ -191,6 +192,17 @@ const AboutManager: React.FC = () => {
                 required
               />
             </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-400">LINE OA (ช่องทางติดต่อทาง LINE)</label>
+            <input
+              value={formData.lineOa || ''}
+              onChange={e => setFormData({ ...formData, lineOa: e.target.value })}
+              className="w-full bg-dark border border-white/10 rounded-lg px-4 py-3 text-white"
+              placeholder="@tanawat หรือ https://lin.ee/xxxxxxx"
+            />
+            <p className="text-xs text-gray-500 italic">วางลิงก์ "เพิ่มเพื่อน" จาก LINE OA (เช่น https://lin.ee/xxxx) หรือ LINE ID ขึ้นต้นด้วย @ — เว้นว่างไว้ถ้าไม่ต้องการแสดงปุ่ม LINE ที่หน้าเว็บ</p>
           </div>
 
           <div className="space-y-2">

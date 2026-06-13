@@ -27,7 +27,8 @@ import {
   Image as ImageIcon,
   Briefcase,
   Layers,
-  Newspaper
+  Newspaper,
+  Sparkles
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -55,6 +56,7 @@ const AdminLayout: React.FC = () => {
     { title: 'Testimonials', icon: Star, path: '/admin/testimonials' },
     { title: 'Trust Logos', icon: Layers, path: '/admin/trust-logos' },
     { title: 'Blogs', icon: Newspaper, path: '/admin/blogs' },
+    { title: 'Auto Blog (AI)', icon: Sparkles, path: '/admin/blog-schedule' },
   ];
 
   return (

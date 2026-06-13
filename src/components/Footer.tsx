@@ -1,7 +1,18 @@
+import { useEffect, useState } from 'react';
 import { Scale, MapPin, Phone, Mail } from 'lucide-react';
+import { fetchApi } from '@/lib/api';
+import { resolveLineUrl } from '@/lib/line';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const [lineOa, setLineOa] = useState<string>('');
+  const lineUrl = resolveLineUrl(lineOa);
+
+  useEffect(() => {
+    fetchApi<{ lineOa?: string }>('/about')
+      .then((data) => setLineOa(data?.lineOa || ''))
+      .catch(() => {});
+  }, []);
 
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
@@ -39,7 +50,8 @@ const Footer = () => {
                 </svg>
               </a>
               <a
-                href="#"
+                href={lineUrl || '#'}
+                {...(lineUrl ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                 className="h-10 w-10 rounded-lg bg-white/10 flex items-center justify-center hover:bg-secondary hover:text-primary transition-colors"
                 aria-label="Line"
               >

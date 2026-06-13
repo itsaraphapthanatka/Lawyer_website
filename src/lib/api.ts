@@ -1,4 +1,7 @@
-export const API_BASE_URL = 'http://localhost:3000';
+// Same-origin base. In production nginx proxies "/api/*" to the NestJS backend
+// (and "/api/uploads/*" to the static uploads). For local dev, vite proxies "/api"
+// to http://localhost:3000 (see vite.config.ts).
+export const API_BASE_URL = '/api';
 
 export async function fetchApi<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const url = `${API_BASE_URL}${endpoint}`;

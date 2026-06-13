@@ -25,8 +25,10 @@ import ProcessManager from '@/pages/admin/ProcessManager';
 import TestimonialManager from '@/pages/admin/TestimonialManager';
 import TrustLogoManager from '@/pages/admin/TrustLogoManager';
 import BlogManager from '@/pages/admin/BlogManager';
+import AutoBlogManager from '@/pages/admin/AutoBlogManager';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AdminLayout from '@/components/AdminLayout';
+import FloatingActions from '@/components/FloatingActions';
 import './App.css';
 
 function Home() {
@@ -72,10 +74,12 @@ function App() {
               <Route path="/admin/testimonials" element={<TestimonialManager />} />
               <Route path="/admin/trust-logos" element={<TrustLogoManager />} />
               <Route path="/admin/blogs" element={<BlogManager />} />
+              <Route path="/admin/blog-schedule" element={<AutoBlogManager />} />
               {/* Other admin routes will go here */}
             </Route>
           </Route>
         </Routes>
+        <FloatingActions />
         <Toaster position="top-center" richColors />
       </div>
     </Router>
