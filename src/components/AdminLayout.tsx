@@ -26,7 +26,8 @@ import {
   Shield, 
   Image as ImageIcon,
   Briefcase,
-  Layers
+  Layers,
+  Newspaper
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -53,6 +54,7 @@ const AdminLayout: React.FC = () => {
     { title: 'Experts', icon: Users, path: '/admin/experts' },
     { title: 'Testimonials', icon: Star, path: '/admin/testimonials' },
     { title: 'Trust Logos', icon: Layers, path: '/admin/trust-logos' },
+    { title: 'Blogs', icon: Newspaper, path: '/admin/blogs' },
   ];
 
   return (

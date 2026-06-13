@@ -76,7 +76,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ value, onChange, label }) => 
               <Button 
                 type="button"
                 variant="outline" 
-                size="xs" 
+                size="sm" 
                 onClick={() => fileInputRef.current?.click()}
                 className="bg-white/10 border-white/20 hover:bg-white/20 text-white text-[10px] h-7 px-2"
               >
@@ -85,7 +85,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ value, onChange, label }) => 
               <Button 
                 type="button"
                 variant="destructive" 
-                size="xs" 
+                size="sm" 
                 onClick={handleRemove}
                 className="text-[10px] h-7 px-2"
               >

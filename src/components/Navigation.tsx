@@ -34,10 +34,16 @@ const Navigation = () => {
     { name: 'ผู้เชี่ยวชาญของเรา', href: '#experts' },
     { name: 'ขั้นตอนการทำงาน', href: '#process' },
     { name: 'รีวิวจากลูกค้า', href: '#testimonials' },
+    { name: 'บทความ', href: '/blogs' },
   ];
 
   const handleNavClick = (href: string) => {
     setIsMobileMenuOpen(false);
+    // Route links (non-hash) navigate directly to their page
+    if (href.startsWith('/')) {
+      navigate(href);
+      return;
+    }
     if (location.pathname !== '/') {
       navigate('/' + href);
     } else {

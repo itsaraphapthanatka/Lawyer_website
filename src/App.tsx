@@ -12,6 +12,8 @@ import BookingSection from '@/sections/BookingSection';
 import TestimonialsSection from '@/sections/TestimonialsSection';
 import MapSection from '@/sections/MapSection';
 import PracticeAreasPage from '@/pages/PracticeAreasPage';
+import BlogsPage from '@/pages/BlogsPage';
+import BlogDetailPage from '@/pages/BlogDetailPage';
 import AdminLogin from '@/pages/AdminLogin';
 import AdminDashboard from '@/pages/AdminDashboard';
 import ExpertManager from '@/pages/admin/ExpertManager';
@@ -22,6 +24,7 @@ import PracticeAreaManager from '@/pages/admin/PracticeAreaManager';
 import ProcessManager from '@/pages/admin/ProcessManager';
 import TestimonialManager from '@/pages/admin/TestimonialManager';
 import TrustLogoManager from '@/pages/admin/TrustLogoManager';
+import BlogManager from '@/pages/admin/BlogManager';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AdminLayout from '@/components/AdminLayout';
 import './App.css';
@@ -53,6 +56,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/practice-areas" element={<PracticeAreasPage />} />
+          <Route path="/blogs" element={<BlogsPage />} />
+          <Route path="/blogs/:id" element={<BlogDetailPage />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           
           <Route element={<ProtectedRoute />}>
@@ -66,6 +71,7 @@ function App() {
               <Route path="/admin/process" element={<ProcessManager />} />
               <Route path="/admin/testimonials" element={<TestimonialManager />} />
               <Route path="/admin/trust-logos" element={<TrustLogoManager />} />
+              <Route path="/admin/blogs" element={<BlogManager />} />
               {/* Other admin routes will go here */}
             </Route>
           </Route>
