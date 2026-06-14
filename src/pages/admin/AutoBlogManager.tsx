@@ -18,6 +18,7 @@ interface Schedule {
   lastError?: string | null;
   lastTitle?: string | null;
   generatedCount?: number;
+  running?: boolean;
 }
 
 const PRESETS = [
@@ -80,21 +81,42 @@ const AutoBlogManager: React.FC = () => {
 
   const runNow = async () => {
     setIsRunning(true);
-    toast.info('กำลังให้ AI สร้างบทความ... อาจใช้เวลาสักครู่');
     try {
-      const res = await fetchApi<{ ok: boolean; blog?: { title: string }; message?: string }>(
+      const res = await fetchApi<{ ok: boolean; started?: boolean; message?: string }>(
         '/blog-schedule/run',
         { method: 'POST' },
       );
-      if (res?.ok) {
-        toast.success(`สร้างบทความสำเร็จ: ${res.blog?.title ?? ''}`);
-      } else {
-        toast.error(res?.message || 'สร้างบทความไม่สำเร็จ');
+      if (!res?.ok) {
+        toast.error(res?.message || 'เริ่มสร้างไม่สำเร็จ');
+        setIsRunning(false);
+        return;
       }
-      load();
+      toast.info('กำลังให้ AI สร้างบทความ... (อาจใช้เวลา 1-2 นาที)');
+      // Generation runs in the background — poll status until it finishes.
+      const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+      for (let i = 0; i < 90; i++) {
+        await sleep(4000);
+        let s: Schedule | undefined;
+        try {
+          s = await fetchApi<Schedule>('/blog-schedule');
+        } catch {
+          continue;
+        }
+        if (s) setData(s);
+        if (s && !s.running) {
+          if (s.lastStatus === 'success') {
+            toast.success(`สร้างบทความสำเร็จ: ${s.lastTitle ?? ''}`);
+          } else if (s.lastStatus === 'error') {
+            toast.error(s.lastError || 'สร้างบทความไม่สำเร็จ');
+          }
+          setIsRunning(false);
+          return;
+        }
+      }
+      toast.message('ยังสร้างไม่เสร็จ — กด "โหลดใหม่" เพื่อดูสถานะภายหลัง');
+      setIsRunning(false);
     } catch {
       toast.error('เกิดข้อผิดพลาดในการสร้างบทความ');
-    } finally {
       setIsRunning(false);
     }
   };
