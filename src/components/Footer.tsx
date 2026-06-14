@@ -124,7 +124,7 @@ const Footer = () => {
 
         {/* Bottom Bar */}
         <div className="pt-12 border-t border-white/10 text-center text-gray-500 text-sm">
-          <p>© {currentYear} สำนักงานกฎหมายฉัตรชัยและเพื่อน สงวนลิขสิทธิ์</p>
+          <p>© {currentYear} สำนักงาน ธนวัฒน์ทนายความ สงวนลิขสิทธิ์</p>
         </div>
       </div>
     </footer>
