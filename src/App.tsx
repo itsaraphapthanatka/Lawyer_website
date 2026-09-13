@@ -28,6 +28,7 @@ import BlogManager from '@/pages/admin/BlogManager';
 import AutoBlogManager from '@/pages/admin/AutoBlogManager';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AdminLayout from '@/components/AdminLayout';
+import NotFoundPage from '@/pages/NotFoundPage';
 import FloatingActions from '@/components/FloatingActions';
 import './App.css';
 
@@ -78,6 +79,10 @@ function App() {
               {/* Other admin routes will go here */}
             </Route>
           </Route>
+
+          {/* ต้องอยู่ล่างสุดเสมอ — จับทุก path ที่ไม่ตรง route ข้างบน
+              (edge ตอบ HTTP 404 ให้อยู่แล้ว ดู Caddyfile matcher @spa) */}
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <FloatingActions />
         <Toaster position="top-center" richColors />
