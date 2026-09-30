@@ -28,13 +28,17 @@ const Navigation = () => {
     }
   }, [location]);
 
-  const navLinks = [
+  // external = /geo ซึ่ง Caddy proxy ไปที่ geo platform ไม่ใช่ route ของ React
+  // ต้องเรนเดอร์เป็น <a href> ให้เบราว์เซอร์โหลดหน้าใหม่ — navigate() จะหาไม่เจอแล้วตกหน้า 404
+  // และ <button onClick> ที่เมนูนี้ใช้อยู่ไม่ใช่ลิงก์ crawler จึงเก็บไม่ได้เลยสักอัน
+  const navLinks: { name: string; href: string; external?: boolean }[] = [
     { name: 'เกี่ยวกับเรา', href: '#about' },
     { name: 'สาขาที่เชี่ยวชาญ', href: '#practice-areas' },
     { name: 'ผู้เชี่ยวชาญของเรา', href: '#experts' },
     { name: 'ขั้นตอนการทำงาน', href: '#process' },
     { name: 'รีวิวจากลูกค้า', href: '#testimonials' },
     { name: 'บทความ', href: '/blogs' },
+    { name: 'บทความกฎหมาย', href: '/geo', external: true },
   ];
 
   const handleNavClick = (href: string) => {
@@ -78,7 +82,15 @@ const Navigation = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
+            {navLinks.map((link) => link.external ? (
+              <a
+                key={link.name}
+                href={link.href}
+                className="text-sm font-medium text-gray-300 hover:text-secondary transition-colors"
+              >
+                {link.name}
+              </a>
+            ) : (
               <button
                 key={link.name}
                 onClick={() => handleNavClick(link.href)}
@@ -112,7 +124,15 @@ const Navigation = () => {
         {isMobileMenuOpen && (
           <div className="md:hidden bg-dark-light rounded-lg shadow-xl mt-2 p-4 border border-white/10">
             <div className="flex flex-col gap-4">
-              {navLinks.map((link) => (
+              {navLinks.map((link) => link.external ? (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  className="text-left text-gray-300 font-medium py-2 hover:text-secondary transition-colors"
+                >
+                  {link.name}
+                </a>
+              ) : (
                 <button
                   key={link.name}
                   onClick={() => handleNavClick(link.href)}
