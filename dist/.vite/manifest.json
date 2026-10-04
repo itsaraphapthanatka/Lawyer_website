@@ -1,0 +1,22 @@
+{
+  "_client-BboeBL8w.js": {
+    "file": "assets/client-BboeBL8w.js",
+    "name": "client",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html"
+    ]
+  },
+  "index.html": {
+    "file": "assets/app-BDwW2e13.js",
+    "name": "app",
+    "src": "index.html",
+    "isEntry": true,
+    "dynamicImports": [
+      "_client-BboeBL8w.js"
+    ],
+    "css": [
+      "assets/app-O23ZdeT_.css"
+    ]
+  }
+}
