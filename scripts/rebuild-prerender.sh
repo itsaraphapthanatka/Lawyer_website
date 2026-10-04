@@ -23,12 +23,14 @@ for e in hero about practice-areas process-steps experts testimonials trust-logo
     data="$data$body"
 done
 data=$(printf '%s' "$data" | sha256sum | cut -c1-16)
-head=$(git -C "$R" rev-parse --short HEAD)
-want="$data $head"
+# ลายนิ้วมือของ "ซอร์ส" ไม่นับ dist/node_modules — commit ที่สคริปต์นี้สร้างเองแตะแค่ dist จึงไม่ทำให้ build วนซ้ำ
+# (รอบแรกใช้ commit ของ main ตรง ๆ แล้ว deploy ก็เลื่อน main → รอบถัดไปเห็นว่า "เปลี่ยน" อีก build ซ้ำทุกวัน)
+src=$(git -C "$R" ls-tree -r HEAD | grep -vE $'\t(dist|node_modules)/' | sha256sum | cut -c1-12)
+want="$data $src"
 if [ -f "$STAMP" ] && [ "$(cat "$STAMP")" = "$want" ]; then
     exit 0
 fi
-log "มีการเปลี่ยนแปลง (data=$data main=$head) — build ใหม่"
+log "มีการเปลี่ยนแปลง (data=$data src=$src) — build ใหม่"
 
 # 2) worktree ตาม main · ลง dependency ใหม่ถ้า lockfile เปลี่ยน
 git -C "$WT" merge -q --ff-only main
