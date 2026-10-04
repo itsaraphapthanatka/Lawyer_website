@@ -3,6 +3,7 @@ import { MapPin, Phone, Mail, Clock, Send, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { fetchApi } from '@/lib/api';
+import { preloaded } from '@/lib/ssgData';
 import { resolveLineUrl } from '@/lib/line';
 
 interface AboutData {
@@ -15,7 +16,7 @@ interface AboutData {
 
 const BookingSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const [aboutData, setAboutData] = useState<AboutData | null>(null);
+  const [aboutData, setAboutData] = useState<AboutData | null>(() => preloaded<AboutData>('/about') ?? null);
   const [formData, setFormData] = useState({
     name: '',
     phone: '',

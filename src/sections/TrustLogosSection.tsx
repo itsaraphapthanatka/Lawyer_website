@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { fetchApi } from '@/lib/api';
+import { preloaded } from '@/lib/ssgData';
 
 interface TrustLogo {
   id: string;
@@ -7,7 +8,7 @@ interface TrustLogo {
 }
 
 const TrustLogosSection = () => {
-  const [logos, setLogos] = useState<TrustLogo[]>([]);
+  const [logos, setLogos] = useState<TrustLogo[]>(() => preloaded<TrustLogo[]>('/trust-logos') ?? []);
 
   useEffect(() => {
     const loadLogos = async () => {

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { ArrowUp } from 'lucide-react';
 import { fetchApi } from '@/lib/api';
+import { preloaded } from '@/lib/ssgData';
 import { resolveLineUrl } from '@/lib/line';
 
 /**
@@ -12,7 +13,7 @@ import { resolveLineUrl } from '@/lib/line';
  */
 const FloatingActions = () => {
   const { pathname } = useLocation();
-  const [lineOa, setLineOa] = useState('');
+  const [lineOa, setLineOa] = useState(() => preloaded<{ lineOa?: string }>('/about')?.lineOa ?? '');
   const [showTop, setShowTop] = useState(false);
 
   useEffect(() => {

@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { fetchApi } from '@/lib/api';
+import { preloaded } from '@/lib/ssgData';
 
 interface PracticeArea {
     id: string;
@@ -21,7 +22,7 @@ interface PracticeArea {
 
 const PracticeAreasPage = () => {
     const navigate = useNavigate();
-    const [practiceAreas, setPracticeAreas] = useState<PracticeArea[]>([]);
+    const [practiceAreas, setPracticeAreas] = useState<PracticeArea[]>(() => preloaded<PracticeArea[]>('/practice-areas') ?? []);
 
     useEffect(() => {
         window.scrollTo(0, 0);

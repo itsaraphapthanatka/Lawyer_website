@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { fetchApi } from '@/lib/api';
+import { preloaded } from '@/lib/ssgData';
 
 interface ProcessStep {
   id: string;
@@ -10,7 +11,7 @@ interface ProcessStep {
 
 const ProcessSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const [steps, setSteps] = useState<ProcessStep[]>([]);
+  const [steps, setSteps] = useState<ProcessStep[]>(() => preloaded<ProcessStep[]>('/process-steps') ?? []);
 
   useEffect(() => {
     // Fetch process steps from API

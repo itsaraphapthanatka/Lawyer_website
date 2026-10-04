@@ -1,3 +1,18 @@
+# tanawat-lawyer.com — เว็บ prerender (vite-react-ssg)
+
+```bash
+npm ci
+npm run build        # tsc + vite-react-ssg build → dist/ มี HTML ของทุก route (หน้าแรก, practice-areas, blogs, blogs/<id> ทุกบทความ, admin/*, 404)
+npm run build:csr    # build แบบ CSR เดิม (ทางถอย) — ใช้คู่กับ Caddy แบบ SPA fallback เท่านั้น
+```
+
+- ตอน build จะดึงข้อมูลจาก API จริง (`https://tanawat-lawyer.com/api`, ตั้งทับได้ด้วย `SSG_API_BASE`) มาใส่ใน HTML
+  ผ่าน `src/lib/ssgData.ts` — บอท/Google เห็นเนื้อหาจริง ส่วนผู้ใช้ยังได้ข้อมูลล่าสุดจาก `useEffect` เหมือนเดิม
+- **แก้เนื้อหาหน้าแรก/บทความในแอดมินแล้วต้อง build ใหม่** จึงจะไปถึงบอท (คนเห็นทันทีอยู่แล้ว)
+- edge (Caddy) ต้องเสิร์ฟ `{path}.html` ก่อน และตอบ 404 ด้วย `404.html` — ดู `/website/edge-configs/tanawat-lawyer.com/Caddyfile`
+
+---
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

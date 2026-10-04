@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { MessageSquare, Phone } from 'lucide-react';
 import { fetchApi } from '@/lib/api';
+import { preloaded } from '@/lib/ssgData';
 
 interface HeroData {
   badge: string;
@@ -13,7 +14,7 @@ interface HeroData {
 
 const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
-  const [heroData, setHeroData] = useState<HeroData | null>(null);
+  const [heroData, setHeroData] = useState<HeroData | null>(() => preloaded<HeroData>('/hero') ?? null);
 
   useEffect(() => {
     const loadHero = async () => {

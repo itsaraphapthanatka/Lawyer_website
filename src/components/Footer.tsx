@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Scale, MapPin, Phone, Mail } from 'lucide-react';
 import { fetchApi } from '@/lib/api';
+import { preloaded } from '@/lib/ssgData';
 import { resolveLineUrl } from '@/lib/line';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-  const [lineOa, setLineOa] = useState<string>('');
+  const [lineOa, setLineOa] = useState<string>(() => preloaded<{ lineOa?: string }>('/about')?.lineOa ?? '');
   const lineUrl = resolveLineUrl(lineOa);
 
   useEffect(() => {

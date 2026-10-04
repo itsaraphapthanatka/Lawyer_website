@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Check, MapPin, Phone, Clock } from 'lucide-react';
 import { fetchApi } from '@/lib/api';
+import { preloaded } from '@/lib/ssgData';
 import * as Icons from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
@@ -21,7 +22,7 @@ interface AboutData {
 
 const AboutSection = () => {
     const sectionRef = useRef<HTMLDivElement>(null);
-    const [aboutData, setAboutData] = useState<AboutData | null>(null);
+    const [aboutData, setAboutData] = useState<AboutData | null>(() => preloaded<AboutData>('/about') ?? null);
 
     useEffect(() => {
         const loadAbout = async () => {

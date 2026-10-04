@@ -4,6 +4,7 @@ import { ArrowLeft, Calendar, User } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { fetchApi, API_BASE_URL } from '@/lib/api';
+import { preloaded } from '@/lib/ssgData';
 
 interface Blog {
     id: string;
@@ -37,8 +38,8 @@ const resolveImage = (image?: string) => {
 const BlogDetailPage = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const [blog, setBlog] = useState<Blog | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const [blog, setBlog] = useState<Blog | null>(() => (id && preloaded<Blog>(`/blogs/${id}`)) || null);
+    const [isLoading, setIsLoading] = useState(() => !(id && preloaded<Blog>(`/blogs/${id}`)));
     const [notFound, setNotFound] = useState(false);
 
     useEffect(() => {

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { fetchApi } from '@/lib/api';
+import { preloaded } from '@/lib/ssgData';
 // import { Button } from '@/components/ui/button';
 
 interface Expert {
@@ -12,7 +13,7 @@ interface Expert {
 
 const ExpertsSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const [experts, setExperts] = useState<Expert[]>([]);
+  const [experts, setExperts] = useState<Expert[]>(() => preloaded<Expert[]>('/experts') ?? []);
 
   useEffect(() => {
     // Fetch experts from the API

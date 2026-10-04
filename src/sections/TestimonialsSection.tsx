@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Star } from 'lucide-react';
 import { fetchApi } from '@/lib/api';
+import { preloaded } from '@/lib/ssgData';
 
 interface Testimonial {
   id: string;
@@ -13,7 +14,7 @@ interface Testimonial {
 
 const TestimonialsSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>(() => preloaded<Testimonial[]>('/testimonials') ?? []);
 
   useEffect(() => {
     // Fetch testimonials from API

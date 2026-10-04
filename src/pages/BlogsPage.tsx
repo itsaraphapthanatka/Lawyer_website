@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight, Calendar, Newspaper } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { fetchApi, API_BASE_URL } from '@/lib/api';
+import { preloaded } from '@/lib/ssgData';
 
 interface Blog {
     id: string;
@@ -36,7 +37,7 @@ const resolveImage = (image?: string) => {
 
 const BlogsPage = () => {
     const navigate = useNavigate();
-    const [blogs, setBlogs] = useState<Blog[]>([]);
+    const [blogs, setBlogs] = useState<Blog[]>(() => (preloaded<Blog[]>('/blogs') ?? []).filter((b) => b.published));
 
     useEffect(() => {
         window.scrollTo(0, 0);

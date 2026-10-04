@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchApi } from '@/lib/api';
+import { preloaded } from '@/lib/ssgData';
 import * as Icons from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { ArrowRight } from 'lucide-react';
@@ -15,7 +16,7 @@ interface PracticeArea {
 const PracticeAreasSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-  const [practiceAreas, setPracticeAreas] = useState<PracticeArea[]>([]);
+  const [practiceAreas, setPracticeAreas] = useState<PracticeArea[]>(() => preloaded<PracticeArea[]>('/practice-areas') ?? []);
 
   useEffect(() => {
     // Fetch practice areas from API

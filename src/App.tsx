@@ -32,6 +32,7 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 import AdminLayout from '@/components/AdminLayout';
 import NotFoundPage from '@/pages/NotFoundPage';
 import FloatingActions from '@/components/FloatingActions';
+import { blogPaths } from '@/lib/ssgData';
 import './App.css';
 
 function Home() {
@@ -88,9 +89,13 @@ export const routes: RouteRecord[] = [
       { index: true, element: <Home /> },
       { path: 'practice-areas', element: <PracticeAreasPage /> },
       { path: 'blogs', element: <BlogsPage /> },
-      { path: 'blogs/:id', element: <BlogDetailPage /> },
+      // prerender บทความทุกชิ้นที่เผยแพร่ — รายชื่อดึงจาก API ตอน build (route แบบ :id ไม่ถูก prerender เองถ้าไม่บอก)
+      { path: 'blogs/:id', element: <BlogDetailPage />, getStaticPaths: blogPaths },
       { path: 'admin/login', element: <AdminLogin /> },
       { element: <ProtectedRoute />, children: [{ element: <AdminLayout />, children: adminChildren }] },
+      // หน้า 404 แบบ prerender (dist/404.html) ให้ edge ส่งเป็น body ของ path ที่ไม่มีจริงพร้อม status 404
+      // — ถ้าส่ง index.html (หน้าแรกที่ prerender แล้ว) React จะ hydrate ไม่ตรงแล้วต้องเรนเดอร์ใหม่ทั้งหน้า
+      { path: '404', element: <NotFoundPage /> },
       // ต้องอยู่ล่างสุดเสมอ (edge ตอบ HTTP 404 ให้อยู่แล้ว ดู Caddyfile matcher @spa)
       { path: '*', element: <NotFoundPage /> },
     ],
