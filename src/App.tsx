@@ -1,4 +1,6 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
+import type { RouteRecord } from 'vite-react-ssg';
+import { AuthProvider } from '@/context/AuthContext';
 import { Toaster } from '@/components/ui/sonner';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
@@ -52,43 +54,45 @@ function Home() {
   );
 }
 
-function App() {
-  return (
-    <Router>
-      <div className="min-h-screen bg-dark">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/practice-areas" element={<PracticeAreasPage />} />
-          <Route path="/blogs" element={<BlogsPage />} />
-          <Route path="/blogs/:id" element={<BlogDetailPage />} />
-          <Route path="/admin/login" element={<AdminLogin />} />
-          
-          <Route element={<ProtectedRoute />}>
-            <Route element={<AdminLayout />}>
-              <Route path="/admin" element={<AdminDashboard />} />
-              <Route path="/admin/experts" element={<ExpertManager />} />
-              <Route path="/admin/messages" element={<MessageManager />} />
-              <Route path="/admin/hero" element={<HeroManager />} />
-              <Route path="/admin/about" element={<AboutManager />} />
-              <Route path="/admin/practice-areas" element={<PracticeAreaManager />} />
-              <Route path="/admin/process" element={<ProcessManager />} />
-              <Route path="/admin/testimonials" element={<TestimonialManager />} />
-              <Route path="/admin/trust-logos" element={<TrustLogoManager />} />
-              <Route path="/admin/blogs" element={<BlogManager />} />
-              <Route path="/admin/blog-schedule" element={<AutoBlogManager />} />
-              {/* Other admin routes will go here */}
-            </Route>
-          </Route>
+// Layout ครอบทุกหน้า — เดิมอยู่ใน <Router> ของ App และ AuthProvider อยู่ใน main.tsx
+// ตอนนี้ main.tsx เป็น entry ของ ViteReactSSG แล้ว จึงต้องย้ายมาไว้ในนี้
+const Layout = () => (
+  <AuthProvider>
+    <div className="min-h-screen bg-dark">
+      <Outlet />
+      <FloatingActions />
+      <Toaster position="top-center" richColors />
+    </div>
+  </AuthProvider>
+);
 
-          {/* ต้องอยู่ล่างสุดเสมอ — จับทุก path ที่ไม่ตรง route ข้างบน
-              (edge ตอบ HTTP 404 ให้อยู่แล้ว ดู Caddyfile matcher @spa) */}
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-        <FloatingActions />
-        <Toaster position="top-center" richColors />
-      </div>
-    </Router>
-  );
-}
+const adminChildren: RouteRecord[] = [
+  { path: 'admin', element: <AdminDashboard /> },
+  { path: 'admin/experts', element: <ExpertManager /> },
+  { path: 'admin/messages', element: <MessageManager /> },
+  { path: 'admin/hero', element: <HeroManager /> },
+  { path: 'admin/about', element: <AboutManager /> },
+  { path: 'admin/practice-areas', element: <PracticeAreaManager /> },
+  { path: 'admin/process', element: <ProcessManager /> },
+  { path: 'admin/testimonials', element: <TestimonialManager /> },
+  { path: 'admin/trust-logos', element: <TrustLogoManager /> },
+  { path: 'admin/blogs', element: <BlogManager /> },
+  { path: 'admin/blog-schedule', element: <AutoBlogManager /> },
+];
 
-export default App;
+export const routes: RouteRecord[] = [
+  {
+    path: '/',
+    element: <Layout />,
+    children: [
+      { index: true, element: <Home /> },
+      { path: 'practice-areas', element: <PracticeAreasPage /> },
+      { path: 'blogs', element: <BlogsPage /> },
+      { path: 'blogs/:id', element: <BlogDetailPage /> },
+      { path: 'admin/login', element: <AdminLogin /> },
+      { element: <ProtectedRoute />, children: [{ element: <AdminLayout />, children: adminChildren }] },
+      // ต้องอยู่ล่างสุดเสมอ (edge ตอบ HTTP 404 ให้อยู่แล้ว ดู Caddyfile matcher @spa)
+      { path: '*', element: <NotFoundPage /> },
+    ],
+  },
+];

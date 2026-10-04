@@ -1,13 +1,7 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
 import './index.css'
-import App from './App.tsx'
-import { AuthProvider } from './context/AuthContext'
+import { ViteReactSSG } from 'vite-react-ssg'
+import { routes } from './App'
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <AuthProvider>
-      <App />
-    </AuthProvider>
-  </StrictMode>,
-)
+// entry ของ vite-react-ssg — แทน createRoot(document.getElementById('root'))
+// เดิม ซึ่งเป็นจุดเดียวในโค้ดที่แตะ browser API ตอน import
+export const createRoot = ViteReactSSG({ routes })
