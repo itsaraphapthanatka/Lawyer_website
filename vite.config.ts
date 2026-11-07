@@ -14,7 +14,10 @@ const ssgOptions: ViteReactSSGOptions = {
   // (blogs/:id ถูกขยายเป็น path จริงจาก getStaticPaths ก่อน)
   // vite-react-ssg 0.9.1 ไม่ฝัง initialState ลง HTML ให้ (renderHTML ได้ initialState: null) แต่ฝั่ง browser
   // ยังอ่าน window.__INITIAL_STATE__ (JSON string) อยู่ — ฝังเองตรงนี้ ไม่งั้น hydrate ไม่ตรงกับ HTML ที่มีข้อมูล
-  onPageRendered: (_route, html, ctx) => {
+  onPageRendered: (_route, rendered, ctx) => {
+    // หน้าที่ตั้ง <title> เอง (Head ของ vite-react-ssg → แท็กมี data-rh) ต้องตัด <title> ตายตัวจาก index.html ออก
+    // ไม่งั้นมีสอง title ในหน้าเดียว · หน้าที่ไม่ได้ตั้ง (หน้าแรก บริการ บทความ) ยังใช้ title จาก index.html ตามเดิม
+    const html = /<title data-rh/.test(rendered) ? rendered.replace(/\s*<title>[^<]*<\/title>/, '') : rendered
     const api = (ctx.initialState as { api?: unknown } | undefined)?.api
     if (!api) return html
     // JSON ซ้อนใน string literal ตามที่ client JSON.parse · escape < > กัน </script> ในเนื้อหาบทความปิดแท็กก่อนเวลา

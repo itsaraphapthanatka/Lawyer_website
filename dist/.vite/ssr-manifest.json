@@ -1,18 +1,20 @@
 {
+  "\u0000/app/node_modules/invariant/browser.js?commonjs-es-import": [],
   "\u0000/app/node_modules/prop-types/index.js?commonjs-es-import": [],
   "\u0000/app/node_modules/prop-types/index.js?commonjs-module": [],
   "\u0000/app/node_modules/react-dom/cjs/react-dom-client.production.js?commonjs-exports": [
-    "/assets/client-BboeBL8w.js"
+    "/assets/client-BhaF_cx6.js"
   ],
   "\u0000/app/node_modules/react-dom/cjs/react-dom.production.js?commonjs-exports": [],
   "\u0000/app/node_modules/react-dom/client.js?commonjs-es-import": [
-    "/assets/client-BboeBL8w.js"
+    "/assets/client-BhaF_cx6.js"
   ],
   "\u0000/app/node_modules/react-dom/client.js?commonjs-module": [
-    "/assets/client-BboeBL8w.js"
+    "/assets/client-BhaF_cx6.js"
   ],
   "\u0000/app/node_modules/react-dom/index.js?commonjs-es-import": [],
   "\u0000/app/node_modules/react-dom/index.js?commonjs-module": [],
+  "\u0000/app/node_modules/react-fast-compare/index.js?commonjs-es-import": [],
   "\u0000/app/node_modules/react/cjs/react-jsx-runtime.production.js?commonjs-exports": [],
   "\u0000/app/node_modules/react/cjs/react.production.js?commonjs-exports": [],
   "\u0000/app/node_modules/react/index.js?commonjs-es-import": [],
@@ -20,11 +22,12 @@
   "\u0000/app/node_modules/react/jsx-runtime.js?commonjs-es-import": [],
   "\u0000/app/node_modules/react/jsx-runtime.js?commonjs-module": [],
   "\u0000/app/node_modules/scheduler/cjs/scheduler.production.js?commonjs-exports": [
-    "/assets/client-BboeBL8w.js"
+    "/assets/client-BhaF_cx6.js"
   ],
   "\u0000/app/node_modules/scheduler/index.js?commonjs-module": [
-    "/assets/client-BboeBL8w.js"
+    "/assets/client-BhaF_cx6.js"
   ],
+  "\u0000/app/node_modules/shallowequal/index.js?commonjs-es-import": [],
   "\u0000commonjsHelpers.js": [],
   "\u0000vite/modulepreload-polyfill.js": [],
   "\u0000vite/preload-helper.js": [],
@@ -65,6 +68,7 @@
   "node_modules/class-variance-authority/dist/index.mjs": [],
   "node_modules/clsx/dist/clsx.mjs": [],
   "node_modules/get-nonce/dist/es2015/index.js": [],
+  "node_modules/invariant/browser.js": [],
   "node_modules/lucide-react/dist/esm/Icon.js": [],
   "node_modules/lucide-react/dist/esm/createLucideIcon.js": [],
   "node_modules/lucide-react/dist/esm/defaultAttributes.js": [],
@@ -1742,13 +1746,14 @@
   "node_modules/prop-types/index.js": [],
   "node_modules/prop-types/lib/ReactPropTypesSecret.js": [],
   "node_modules/react-dom/cjs/react-dom-client.production.js": [
-    "/assets/client-BboeBL8w.js"
+    "/assets/client-BhaF_cx6.js"
   ],
   "node_modules/react-dom/cjs/react-dom.production.js": [],
   "node_modules/react-dom/client.js": [
-    "/assets/client-BboeBL8w.js"
+    "/assets/client-BhaF_cx6.js"
   ],
   "node_modules/react-dom/index.js": [],
+  "node_modules/react-fast-compare/index.js": [],
   "node_modules/react-remove-scroll-bar/dist/es2015/component.js": [],
   "node_modules/react-remove-scroll-bar/dist/es2015/constants.js": [],
   "node_modules/react-remove-scroll-bar/dist/es2015/utils.js": [],
@@ -1769,11 +1774,12 @@
   "node_modules/react/index.js": [],
   "node_modules/react/jsx-runtime.js": [],
   "node_modules/scheduler/cjs/scheduler.production.js": [
-    "/assets/client-BboeBL8w.js"
+    "/assets/client-BhaF_cx6.js"
   ],
   "node_modules/scheduler/index.js": [
-    "/assets/client-BboeBL8w.js"
+    "/assets/client-BhaF_cx6.js"
   ],
+  "node_modules/shallowequal/index.js": [],
   "node_modules/sonner/dist/index.mjs": [],
   "node_modules/tailwind-merge/dist/bundle-mjs.mjs": [],
   "node_modules/tslib/tslib.es6.mjs": [],
@@ -1785,6 +1791,7 @@
   "node_modules/vite-react-ssg/dist/index.mjs": [],
   "node_modules/vite-react-ssg/dist/shared/vite-react-ssg.BhGKpaqQ.mjs": [],
   "node_modules/vite-react-ssg/dist/shared/vite-react-ssg.C6pK7rvr.mjs": [],
+  "node_modules/vite-react-ssg/dist/shared/vite-react-ssg.CoMLbIiW.mjs": [],
   "node_modules/vite-react-ssg/dist/shared/vite-react-ssg.DTTf7HZy.mjs": [],
   "node_modules/vite-react-ssg/node_modules/react-helmet-async/lib/index.module.js": [],
   "src/App.css": [],
@@ -1805,6 +1812,7 @@
   "src/hooks/use-mobile.ts": [],
   "src/index.css": [],
   "src/lib/api.ts": [],
+  "src/lib/legal.ts": [],
   "src/lib/line.ts": [],
   "src/lib/ssgData.ts": [],
   "src/lib/utils.ts": [],
@@ -1825,6 +1833,10 @@
   "src/pages/admin/ProcessManager.tsx": [],
   "src/pages/admin/TestimonialManager.tsx": [],
   "src/pages/admin/TrustLogoManager.tsx": [],
+  "src/pages/legal/CookiePolicyPage.tsx": [],
+  "src/pages/legal/LegalLayout.tsx": [],
+  "src/pages/legal/PrivacyPolicyPage.tsx": [],
+  "src/pages/legal/TermsPage.tsx": [],
   "src/sections/AboutSection.tsx": [],
   "src/sections/BookingSection.tsx": [],
   "src/sections/ExpertsSection.tsx": [],

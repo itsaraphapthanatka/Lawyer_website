@@ -3,6 +3,8 @@ import { Scale, MapPin, Phone, Mail } from 'lucide-react';
 import { fetchApi } from '@/lib/api';
 import { preloaded } from '@/lib/ssgData';
 import { resolveLineUrl } from '@/lib/line';
+import { Link } from 'react-router-dom';
+import { LEGAL_LINKS } from '@/lib/legal';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -124,7 +126,12 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-12 border-t border-white/10 text-center text-gray-500 text-sm">
+        <div className="pt-12 border-t border-white/10 text-center text-gray-500 text-sm space-y-4">
+          <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2" aria-label="นโยบาย">
+            {LEGAL_LINKS.map((l) => (
+              <Link key={l.to} to={l.to} className="hover:text-secondary transition-colors">{l.label}</Link>
+            ))}
+          </nav>
           <p>© {currentYear} สำนักงาน ธนวัฒน์ทนายความ สงวนลิขสิทธิ์</p>
         </div>
       </div>

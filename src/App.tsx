@@ -31,6 +31,9 @@ import AutoBlogManager from '@/pages/admin/AutoBlogManager';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AdminLayout from '@/components/AdminLayout';
 import NotFoundPage from '@/pages/NotFoundPage';
+import PrivacyPolicyPage from '@/pages/legal/PrivacyPolicyPage';
+import TermsPage from '@/pages/legal/TermsPage';
+import CookiePolicyPage from '@/pages/legal/CookiePolicyPage';
 import FloatingActions from '@/components/FloatingActions';
 import { blogPaths } from '@/lib/ssgData';
 import './App.css';
@@ -91,6 +94,10 @@ export const routes: RouteRecord[] = [
       { path: 'blogs', element: <BlogsPage /> },
       // prerender บทความทุกชิ้นที่เผยแพร่ — รายชื่อดึงจาก API ตอน build (route แบบ :id ไม่ถูก prerender เองถ้าไม่บอก)
       { path: 'blogs/:id', element: <BlogDetailPage />, getStaticPaths: blogPaths },
+      // หน้านโยบาย — prerender เป็น privacy-policy.html ฯลฯ edge เสิร์ฟผ่านกฎ {path}.html อยู่แล้ว
+      { path: 'privacy-policy', element: <PrivacyPolicyPage /> },
+      { path: 'terms', element: <TermsPage /> },
+      { path: 'cookie-policy', element: <CookiePolicyPage /> },
       { path: 'admin/login', element: <AdminLogin /> },
       { element: <ProtectedRoute />, children: [{ element: <AdminLayout />, children: adminChildren }] },
       // หน้า 404 แบบ prerender (dist/404.html) ให้ edge ส่งเป็น body ของ path ที่ไม่มีจริงพร้อม status 404
