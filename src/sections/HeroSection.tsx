@@ -128,6 +128,19 @@ const HeroSection = () => {
                   <Phone className="w-5 h-5" />
                 </Button>
               )}
+              <a
+                href="https://lin.ee/oksriv0"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center self-center transition-transform hover:scale-105"
+              >
+                <img
+                  src="https://scdn.line-apps.com/n/line_add_friends/btn/th.png"
+                  alt="เพิ่มเพื่อน"
+                  height={36}
+                  className="h-9 w-auto"
+                />
+              </a>
             </div>
           </div>
 
