@@ -15,6 +15,7 @@ interface HeroData {
 const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const [heroData, setHeroData] = useState<HeroData | null>(() => preloaded<HeroData>('/hero') ?? null);
+  const [phone, setPhone] = useState(() => preloaded<{ phone?: string }>('/about')?.phone ?? '');
 
   useEffect(() => {
     const loadHero = async () => {
@@ -26,6 +27,9 @@ const HeroSection = () => {
       }
     };
     loadHero();
+    fetchApi<{ phone?: string }>('/about')
+      .then((d) => d?.phone && setPhone(d.phone))
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -52,6 +56,9 @@ const HeroSection = () => {
       element.scrollIntoView({ behavior: 'smooth' });
     }
   };
+
+  // "098 935 9391" -> "tel:0989359391" (เก็บแค่ตัวเลขและ + เพื่อให้มือถือโทรออกได้)
+  const telHref = phone ? `tel:${phone.replace(/[^\d+]/g, '')}` : '';
 
   if (!heroData) return null;
 
@@ -98,15 +105,29 @@ const HeroSection = () => {
                 ปรึกษากฎหมายกับเรา
                 <MessageSquare className="w-5 h-5" />
               </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                onClick={() => scrollToSection('#contact')}
-                className="flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white px-8 py-6 rounded-xl text-lg font-bold border border-white/20 transition-all"
-              >
-                โทรเลย
-                <Phone className="w-5 h-5" />
-              </Button>
+              {telHref ? (
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white px-8 py-6 rounded-xl text-lg font-bold border border-white/20 transition-all"
+                >
+                  <a href={telHref} aria-label={`โทรหาเรา ${phone}`}>
+                    โทรเลย
+                    <Phone className="w-5 h-5" />
+                  </a>
+                </Button>
+              ) : (
+                <Button
+                  size="lg"
+                  variant="outline"
+                  onClick={() => scrollToSection('#contact')}
+                  className="flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white px-8 py-6 rounded-xl text-lg font-bold border border-white/20 transition-all"
+                >
+                  โทรเลย
+                  <Phone className="w-5 h-5" />
+                </Button>
+              )}
             </div>
           </div>
 
