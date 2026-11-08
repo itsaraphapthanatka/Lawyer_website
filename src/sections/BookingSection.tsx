@@ -299,7 +299,14 @@ const BookingSection = () => {
             </form>
 
             <div className="mt-8 pt-6 border-t border-white/5 text-center text-gray-500 text-sm">
-              หรือโทรหาเราที่ <span className="font-bold text-secondary">{aboutData?.phone || '02-743-4025'}</span> ตลอด 24 ชั่วโมง
+              หรือโทรหาเราที่{' '}
+              <a
+                href={`tel:${(aboutData?.phone || '02-743-4025').replace(/[^\d+]/g, '')}`}
+                className="font-bold text-secondary underline-offset-4 hover:underline"
+              >
+                {aboutData?.phone || '02-743-4025'}
+              </a>{' '}
+              ตลอด 24 ชั่วโมง
             </div>
           </div>
         </div>
