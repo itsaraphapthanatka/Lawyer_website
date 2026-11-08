@@ -1,6 +1,6 @@
 {
-  "_client-BhaF_cx6.js": {
-    "file": "assets/client-BhaF_cx6.js",
+  "_client-BEV3JwtZ.js": {
+    "file": "assets/client-BEV3JwtZ.js",
     "name": "client",
     "isDynamicEntry": true,
     "imports": [
@@ -8,12 +8,12 @@
     ]
   },
   "index.html": {
-    "file": "assets/app-BJG_Xs2-.js",
+    "file": "assets/app-BEcVyIdm.js",
     "name": "app",
     "src": "index.html",
     "isEntry": true,
     "dynamicImports": [
-      "_client-BhaF_cx6.js"
+      "_client-BEV3JwtZ.js"
     ],
     "css": [
       "assets/app-CfTrXUUq.css"
