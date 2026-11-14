@@ -1,0 +1,41 @@
+# CI — type-check and prerender the site (pulls the public API at build time, like the server build),
+# then make sure the homepage really has server-rendered content.
+# The job is named "build": the server's pull-based deploy waits for this check to pass on main.
+# Commits that only touch dist/ are the server's own prerender builds — already deployed, no CI needed.
+name: CI
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['dist/**']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci --no-audit --no-fund
+
+      - run: npm run build
+
+      - name: Homepage is prerendered
+        run: |
+          grep -q 'data-server-rendered' dist/index.html
+          test "$(wc -c < dist/index.html)" -ge 20000
+          test -f dist/blogs.html

@@ -16,6 +16,11 @@ API=https://tanawat-lawyer.com/api
 UIDGID="$(id -u):$(id -g)"
 log() { echo "$(date '+%F %T') $*"; }
 
+# กันสอง build ชนกัน (cron 05:30 กับ autodeploy ใน geo-edge-configs ที่เรียกสคริปต์นี้หลัง CI ผ่าน)
+# exit 75 = "ไม่ว่าง ลองใหม่ทีหลัง" — autodeploy ย้อน checkout แล้วรอรอบหน้า
+exec 9>/tmp/lawyer-website-rebuild.lock
+flock -n 9 || { log "มี build อื่นรันอยู่ — ข้าม"; exit 75; }
+
 # 1) ลายนิ้วมือ
 data=""
 for e in hero about practice-areas process-steps experts testimonials trust-logos blogs; do
