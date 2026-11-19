@@ -56,12 +56,16 @@ fi
 # 4) commit dist บน branch ของ worktree → ff-merge main → push
 cd "$WT"
 git add -A dist
+changed=0
 if git diff --cached --quiet; then
     log "dist เหมือนเดิม — ไม่ต้อง deploy"
 else
     git commit -q -m "build: prerender $(date +%F) (api $data)"
+    changed=1
 fi
 git -C "$R" merge -q --ff-only "$(git -C "$WT" branch --show-current)"
 git -C "$R" push -q origin main 2>/dev/null || log "push origin ไม่สำเร็จ (ของจริงอัปเดตแล้ว ค่อย push ทีหลัง)"
 echo "$want" > "$STAMP"
+# แจ้ง Bing (ที่ ChatGPT ใช้ค้น) เฉพาะรอบที่หน้าเว็บเปลี่ยนจริง — หลัง edge เสิร์ฟของใหม่แล้ว
+if [ "$changed" = 1 ]; then log "$("$R/scripts/indexnow.sh" 2>&1)"; fi
 log "deploy แล้ว: main @ $(git -C "$R" rev-parse --short HEAD) · หน้าแรก $(wc -c < "$R/dist/index.html") bytes · บทความ $(ls "$R"/dist/blogs/*.html | wc -l) หน้า"

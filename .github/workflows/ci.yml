@@ -39,3 +39,4 @@ jobs:
           grep -q 'data-server-rendered' dist/index.html
           test "$(wc -c < dist/index.html)" -ge 20000
           test -f dist/blogs.html
+          grep -q "<loc>https://tanawat-lawyer.com/blogs/" dist/sitemap.xml
